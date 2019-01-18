@@ -5,7 +5,9 @@ defmodule PhoenixConfigExampleWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", PhoenixConfigExampleWeb do
+  scope "/", PhoenixConfigExampleWeb do
     pipe_through :api
+
+    get "/", HelloController, :hello
   end
 end
