@@ -3,11 +3,8 @@ defmodule PhoenixConfigExampleWeb.HelloController do
 
   def hello(conn, _params) do
     conn
-    |> send_resp(
-      200,
-      Jason.encode!(%{
-        hello: "World"
-      })
-    )
+    |> fetch_session()
+    |> put_session(:message, "value")
+    |> send_resp(200, Jason.encode!(%{hello: "World"}))
   end
 end

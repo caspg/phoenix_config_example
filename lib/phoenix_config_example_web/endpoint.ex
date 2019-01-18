@@ -32,10 +32,23 @@ defmodule PhoenixConfigExampleWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
 
+  defmodule RuntimeSessionConfigPlug do
+    # init is evaluated during compiletime
+    def init(opts), do: Plug.Session.init(opts)
+
+    def call(conn, opts) do
+      # this is a hack to allow defining `domain`  during runtime/application boot
+      domain = Application.get_env(:phoenix_config_example, :cookie_domain)
+      runtime_opts = put_in(opts, [:cookie_opts, :domain], domain)
+
+      Plug.Session.call(conn, runtime_opts)
+    end
+  end
+
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
-  plug Plug.Session,
+  plug RuntimeSessionConfigPlug,
     store: :cookie,
     key: "_phoenix_config_example_key",
     signing_salt: "75YwJFSe"
