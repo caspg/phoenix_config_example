@@ -52,4 +52,3 @@ release :phoenix_config_example do
     :runtime_tools
   ]
 end
-
